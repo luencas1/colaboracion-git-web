@@ -1,0 +1,282 @@
+/* ===================== VARIABLES ===================== */
+:root {
+  --bg: #f5f5f0;
+  --surface: #fdfdfb;
+  --text: #1c2433;
+  --muted: #5f6b7a;
+  --border: #e3e3dc;
+  --accent: #c2410c;
+  --blue: #1d5bbf;
+  --green: #1a7f4b;
+  --dark: #111827;
+  --code-bg: #111827;
+  --code-text: #e5e7eb;
+  --warn-bg: #fff3e0;
+  --info-bg: #e6eefa;
+  --radius: 12px;
+  --max: 1080px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f141c;
+    --surface: #171e29;
+    --text: #e8eaee;
+    --muted: #9aa5b4;
+    --border: #273142;
+    --accent: #f97316;
+    --blue: #6aa1ff;
+    --green: #4ade80;
+    --code-bg: #0a0e14;
+    --warn-bg: #2b2014;
+    --info-bg: #15223a;
+  }
+}
+
+/* ===================== BASE ===================== */
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .5rem; }
+h2 { font-size: clamp(1.6rem, 4vw, 2.2rem); }
+h3 { font-size: 1.1rem; }
+p { margin: 0 0 .75rem; }
+a { color: var(--blue); }
+
+code, pre {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: .9em;
+}
+
+:not(pre) > code {
+  background: var(--info-bg);
+  padding: .1em .35em;
+  border-radius: 4px;
+}
+
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: .5rem 0 .75rem;
+}
+
+.muted { color: var(--muted); font-size: .95rem; }
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: .25rem;
+}
+
+/* ===================== HERO ===================== */
+.hero {
+  background: var(--dark);
+  color: #f3f4f6;
+  padding: 0 16px 4rem;
+}
+
+.nav {
+  max-width: var(--max);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 0;
+}
+
+.nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav a { color: #cbd5e1; text-decoration: none; }
+.nav a:hover { color: #fff; }
+
+.logo { font-family: ui-monospace, Menlo, monospace; font-weight: 700; color: #fff !important; }
+.logo span { color: #f97316; }
+
+.hero-content { max-width: var(--max); margin: 3rem auto 0; }
+.hero h1 { font-size: clamp(2rem, 6vw, 3.4rem); max-width: 18ch; }
+.hero .lead { color: #cbd5e1; font-size: 1.15rem; max-width: 60ch; }
+.hero .eyebrow { color: #f97316; }
+
+.terminal { max-width: 560px; border: 1px solid #273142; }
+.prompt { color: #4ade80; }
+
+/* ===================== SECCIONES ===================== */
+.section {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 4rem 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.grid-2, .grid-3 {
+  display: grid;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+.card.mini p { margin: 0; color: var(--muted); }
+
+.tag {
+  display: inline-block;
+  font-size: .8rem;
+  font-weight: 700;
+  padding: .15rem .6rem;
+  border-radius: 999px;
+  color: #fff;
+  margin-bottom: .75rem;
+}
+.tag-blue { background: var(--blue); }
+.tag-green { background: var(--green); }
+
+/* ===================== TABLAS ===================== */
+.table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+th, td {
+  text-align: left;
+  padding: .75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+th { background: var(--dark); color: #fff; font-weight: 600; }
+
+/* ===================== PASOS ===================== */
+.steps {
+  list-style: none;
+  counter-reset: paso;
+  padding: 0;
+  margin: 2rem 0;
+}
+
+.steps li {
+  counter-increment: paso;
+  position: relative;
+  padding: 0 0 1.5rem 3.5rem;
+  border-left: 2px solid var(--border);
+  margin-left: 1.1rem;
+}
+.steps li:last-child { border-left-color: transparent; }
+
+.steps li::before {
+  content: counter(paso);
+  position: absolute;
+  left: -1.15rem;
+  top: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+/* ===================== FLUJO FORK ===================== */
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem;
+  margin: 2rem 0;
+}
+
+.flow-box {
+  flex: 1 1 200px;
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+}
+.flow-box strong { font-family: ui-monospace, Menlo, monospace; font-size: 1.1rem; }
+.flow-box small { color: var(--muted); }
+.flow-dark { background: var(--dark); color: #fff; border-color: var(--dark); }
+.flow-dark small { color: #9aa5b4; }
+
+.flow-arrow {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: .85rem;
+  color: var(--accent);
+  text-align: center;
+}
+
+/* ===================== AVISOS ===================== */
+.callout {
+  background: var(--info-bg);
+  border-left: 4px solid var(--blue);
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+}
+.callout-warn { background: var(--warn-bg); border-left-color: var(--accent); }
+
+/* ===================== EQUIPO ===================== */
+.person { text-align: center; }
+.avatar {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+/* ===================== FOOTER ===================== */
+.footer {
+  background: var(--dark);
+  color: #cbd5e1;
+  text-align: center;
+  padding: 2rem 16px;
+}
+
+/* ===================== MÓVIL ===================== */
+@media (max-width: 600px) {
+  .flow-arrow { flex-basis: 100%; }
+  .steps li { padding-left: 2.5rem; }
+}

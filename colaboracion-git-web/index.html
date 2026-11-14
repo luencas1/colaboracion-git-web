@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colaborar con Git</title>
+  <meta name="description" content="Guía práctica para colaborar en equipo con Git y GitHub: repositorio compartido y fork.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ===================== ENCABEZADO ===================== -->
+  <header class="hero">
+    <nav class="nav">
+      <a href="#" class="logo"><span>$</span> git colabora</a>
+      <ul>
+        <li><a href="#modelos">Modelos</a></li>
+        <li><a href="#compartido">Compartido</a></li>
+        <li><a href="#fork">Fork</a></li>
+        <li><a href="#practicas">Buenas prácticas</a></li>
+        <li><a href="#errores">Errores</a></li>
+      </ul>
+    </nav>
+
+    <div class="hero-content">
+      <p class="eyebrow">Git &amp; GitHub · Trabajo en equipo</p>
+      <h1>Colaborar es proponer, revisar e integrar.</h1>
+      <p class="lead">
+        Guía paso a paso para trabajar en equipo con Git: invitando colaboradores
+        a un repositorio compartido o contribuyendo con un fork.
+      </p>
+      <pre class="terminal"><code><span class="prompt">$</span> git switch -c feature/mi-aporte
+<span class="prompt">$</span> git commit -m "Agrega mi sección"
+<span class="prompt">$</span> git push -u origin feature/mi-aporte</code></pre>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===================== MODELOS ===================== -->
+    <section id="modelos" class="section">
+      <p class="eyebrow">Paso 0</p>
+      <h2>¿Puedes escribir en el repositorio?</h2>
+      <p>No lo decide el tamaño del proyecto, sino el <strong>permiso</strong>.</p>
+
+      <div class="grid-2">
+        <article class="card">
+          <span class="tag tag-blue">Sí</span>
+          <h3>Repositorio compartido</h3>
+          <p>Todo el equipo tiene permiso de escritura. Cada persona clona, crea ramas y hace <code>push</code> al <strong>mismo</strong> repositorio.</p>
+          <p class="muted">Típico en empresas y equipos de clase.</p>
+        </article>
+        <article class="card">
+          <span class="tag tag-green">No</span>
+          <h3>Fork</h3>
+          <p>Copias el proyecto a <strong>tu cuenta</strong>, trabajas ahí y propones tus cambios al original con un <strong>pull request</strong>.</p>
+          <p class="muted">Típico en código abierto.</p>
+        </article>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th></th><th>Clonar</th><th>Hacer fork</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Dónde ocurre</td><td>En tu computadora</td><td>En GitHub (botón Fork)</td></tr>
+            <tr><td>Qué crea</td><td>Una copia local</td><td>Una copia en tu cuenta</td></tr>
+            <tr><td>¿Puedes subir?</td><td>Solo si eres colaborador</td><td>Siempre, a tu fork</td></tr>
+            <tr><td>Cómo propones</td><td><code>push</code> de una rama</td><td>Pull request al original</td></tr>
+            <tr><td>Remotos</td><td><code>origin</code></td><td><code>origin</code> + <code>upstream</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================== REPOSITORIO COMPARTIDO ===================== -->
+    <section id="compartido" class="section">
+      <p class="eyebrow">Modelo 1</p>
+      <h2>Repositorio compartido (invitaciones)</h2>
+
+      <ol class="steps">
+        <li>
+          <h3>El dueño invita</h3>
+          <p>En GitHub: <strong>Settings → Collaborators → Add people</strong>. La otra persona acepta en <strong>github.com/notifications</strong>.</p>
+        </li>
+        <li>
+          <h3>El colaborador clona</h3>
+<pre><code>git clone https://github.com/DUEÑO/proyecto.git
+cd proyecto</code></pre>
+          <p>Descarga el repo completo y crea el remoto <code>origin</code>.</p>
+        </li>
+        <li>
+          <h3>Trabaja en su propia rama</h3>
+<pre><code>git switch -c feature/mi-seccion
+git add .
+git commit -m "Agrega mi sección"
+git push -u origin feature/mi-seccion</code></pre>
+          <p><code>-c</code> crea la rama; <code>-u</code> la vincula con la rama remota.</p>
+        </li>
+        <li>
+          <h3>El dueño revisa</h3>
+<pre><code>git fetch
+git log --oneline main..origin/feature/mi-seccion
+git diff main...origin/feature/mi-seccion</code></pre>
+          <p><code>..</code> = commits nuevos de la rama · <code>...</code> = cambios desde que se separó de main.</p>
+        </li>
+        <li>
+          <h3>Integra y limpia</h3>
+<pre><code>git merge origin/feature/mi-seccion
+git push
+git push origin --delete feature/mi-seccion</code></pre>
+        </li>
+        <li>
+          <h3>Todos se actualizan</h3>
+<pre><code>git switch main
+git pull
+git fetch --prune
+git branch -d feature/mi-seccion</code></pre>
+        </li>
+      </ol>
+
+      <div class="callout callout-warn">
+        <strong>Ojo:</strong> en un repo compartido cualquiera puede hacer push a <code>main</code>.
+        Protege la rama en <strong>Settings → Branches</strong> y usa pull requests.
+      </div>
+    </section>
+
+    <!-- ===================== FORK ===================== -->
+    <section id="fork" class="section">
+      <p class="eyebrow">Modelo 2</p>
+      <h2>Forking workflow</h2>
+
+      <div class="flow">
+        <div class="flow-box flow-dark">
+          <strong>upstream</strong>
+          <span>DUEÑO/proyecto</span>
+          <small>Original · solo lectura</small>
+        </div>
+        <div class="flow-arrow">Fork →<br>← PR</div>
+        <div class="flow-box">
+          <strong>origin</strong>
+          <span>TU-USUARIO/proyecto</span>
+          <small>Tu copia en GitHub</small>
+        </div>
+        <div class="flow-arrow">clone →<br>← push</div>
+        <div class="flow-box">
+          <strong>tu PC</strong>
+          <span>proyecto/</span>
+          <small>origin + upstream</small>
+        </div>
+      </div>
+
+      <ol class="steps">
+        <li>
+          <h3>Haz fork en GitHub</h3>
+          <p>En el repo original: botón <strong>Fork → Create fork</strong>.</p>
+        </li>
+        <li>
+          <h3>Clona tu fork y conecta el original</h3>
+<pre><code>git clone https://github.com/TU-USUARIO/proyecto.git
+cd proyecto
+git remote add upstream https://github.com/DUEÑO/proyecto.git
+git remote -v</code></pre>
+          <p><code>git remote -v</code> debe mostrar 4 líneas: <code>origin</code> y <code>upstream</code>.</p>
+        </li>
+        <li>
+          <h3>Una rama por cambio</h3>
+<pre><code>git switch -c fix/mi-arreglo
+git add archivo.html
+git commit -m "Corrige el título"
+git push -u origin fix/mi-arreglo</code></pre>
+        </li>
+        <li>
+          <h3>Abre el pull request</h3>
+          <p>En tu fork: <strong>Compare &amp; pull request</strong>. Comprueba la barra:</p>
+          <pre><code>DUEÑO/proyecto main  ←  TU-USUARIO/proyecto fix/mi-arreglo</code></pre>
+        </li>
+        <li>
+          <h3>Mantén tu fork al día</h3>
+<pre><code>git switch main
+git fetch upstream
+git merge upstream/main
+git push origin main</code></pre>
+          <p>O en GitHub: <strong>Sync fork → Update branch</strong> y luego <code>git pull</code>.</p>
+        </li>
+      </ol>
+
+      <div class="callout">
+        <strong>Truco:</strong> si nunca trabajas en <code>main</code> de tu fork, sincronizar siempre es <em>fast-forward</em>: sin conflictos.
+      </div>
+    </section>
+
+    <!-- ===================== BUENAS PRÁCTICAS ===================== -->
+    <section id="practicas" class="section">
+      <p class="eyebrow">Acuerdos de equipo</p>
+      <h2>Buenas prácticas</h2>
+
+      <div class="grid-3">
+        <div class="card mini"><h3>🔒 Nada directo a main</h3><p>Todo cambio entra por una rama y una revisión.</p></div>
+        <div class="card mini"><h3>🏷️ Ramas con prefijo</h3><p><code>feature/</code>, <code>fix/</code>, <code>docs/</code> + tu usuario.</p></div>
+        <div class="card mini"><h3>🕐 Pull al empezar</h3><p><code>git pull</code> antes de trabajar cada día.</p></div>
+        <div class="card mini"><h3>✅ Commits pequeños</h3><p>Un cambio por commit, con mensaje claro en imperativo.</p></div>
+        <div class="card mini"><h3>🔍 Otra persona revisa</h3><p>Nadie integra su propio trabajo sin una segunda mirada.</p></div>
+        <div class="card mini"><h3>🧹 Limpia ramas</h3><p>Borra local y remota cuando ya están integradas.</p></div>
+      </div>
+    </section>
+
+    <!-- ===================== ERRORES ===================== -->
+    <section id="errores" class="section">
+      <p class="eyebrow">Si ves esto, no te asustes</p>
+      <h2>Errores comunes</h2>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Situación</th><th>Solución</th></tr></thead>
+          <tbody>
+            <tr><td><code>Permission denied (403)</code></td><td>No eres colaborador o no aceptaste la invitación. En repos ajenos usa fork.</td></tr>
+            <tr><td>Clonaste el original y no tu fork</td><td><code>git remote rename origin upstream</code> y <code>git remote add origin URL-de-tu-fork</code></td></tr>
+            <tr><td><code>remote upstream already exists</code></td><td>Revisa con <code>git remote -v</code> o corrige con <code>git remote set-url</code>.</td></tr>
+            <tr><td>Tu fork dice "X commits behind"</td><td><code>fetch upstream</code> + <code>merge upstream/main</code> + <code>push origin main</code>.</td></tr>
+            <tr><td>Hiciste commit en main del fork</td><td><code>git switch -c rama-nueva</code>, vuelve a main y <code>git reset --hard upstream/main</code>.</td></tr>
+            <tr><td>Conflicto al hacer merge</td><td>Edita el archivo, quita las marcas <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> <code>=======</code> <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>, luego <code>git add</code> y <code>git commit</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================== EQUIPO =====================
+         Cada persona edita SOLO su propia tarjeta.
+         Así los dos pueden trabajar a la vez sin conflictos. -->
+    <section id="equipo" class="section">
+      <p class="eyebrow">Hecho en equipo</p>
+      <h2>Colaboradores</h2>
+
+      <div class="grid-2">
+        <!-- PERSONA A: edita solo esta tarjeta -->
+        <article class="card person">
+          <div class="avatar">A</div>
+          <h3>Nombre Persona A</h3>
+          <p class="muted">@usuario-a · Dueño del repositorio</p>
+          <p>Escribe aquí qué aportaste al proyecto.</p>
+        </article>
+
+        <!-- PERSONA B: edita solo esta tarjeta -->
+        <article class="card person">
+          <div class="avatar">B</div>
+          <h3>Nombre Persona B</h3>
+          <p class="muted">@usuario-b · Colaborador</p>
+          <p>Escribe aquí qué aportaste al proyecto.</p>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>¿Tienes permiso? → <strong>compartido</strong>. ¿No lo tienes? → <strong>fork</strong>. En ambos: <strong>ramas y revisión</strong>.</p>
+  </footer>
+
+</body>
+</html>
